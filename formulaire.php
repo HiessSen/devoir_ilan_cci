@@ -1,16 +1,13 @@
 <?php
 require_once 'class_formgenerator.php';
 session_start();
-session_destroy();
+//session_destroy();
 if (isset($_POST['reset'])) {
     unset($_SESSION['fields']);
     header("Location: " . $_SERVER['PHP_SELF']);
     exit;
 }
-// Initialiser le formulaire
 $form = new FormGenerator($_SERVER['PHP_SELF'], "POST");
-
-// Charger les champs précédemment ajoutés depuis la session
 if (isset($_SESSION['fields'])) {
     foreach ($_SESSION['fields'] as $field) {
         $form->addField($field['name'], $field['type'], $field['label'], $field['attributes']);
@@ -41,15 +38,12 @@ if (isset($_POST['ajouter'])) {
         'label' => $fieldLabel,
         'attributes' => $fieldAttributes
     ];
-
-    // Rediriger pour éviter la soumission répétée
     header("Location: " . $_SERVER['PHP_SELF']);
     exit;
 }
 if ($_SERVER["REQUEST_METHOD"] === "POST" && !isset($_POST['ajouter']) && !isset($_POST['reset'])) {
     if ($form->handleSubmission()) {
         echo "<p style='color: green;'>Le formulaire a été soumis avec succès !</p>";
-        // Réinitialiser les champs après soumission réussie
         unset($_SESSION['fields']);
     } else {
         echo '<p style="color: red;">Veuillez corriger les erreurs ci-dessous.</p>';

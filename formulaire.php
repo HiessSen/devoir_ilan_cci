@@ -2,18 +2,22 @@
 require_once 'class_formgenerator.php';
 session_start();
 //session_destroy();
-if (isset($_POST['reset'])) {
+if (isset($_POST['reset']))
+{
     unset($_SESSION['fields']);
     header("Location: " . $_SERVER['PHP_SELF']);
     exit;
 }
 $form = new FormGenerator($_SERVER['PHP_SELF'], "POST");
-if (isset($_SESSION['fields'])) {
-    foreach ($_SESSION['fields'] as $field) {
+if (isset($_SESSION['fields']))
+{
+    foreach ($_SESSION['fields'] as $field)
+    {
         $form->addField($field['name'], $field['type'], $field['label'], $field['attributes']);
     }
 }
-if (isset($_POST['ajouter'])) {
+if (isset($_POST['ajouter']))
+{
     $fieldType = $_POST['fieldType'];
     $fieldName = $_POST['fieldName'];
     $fieldLabel = $_POST['fieldLabel'];
@@ -25,7 +29,8 @@ if (isset($_POST['ajouter'])) {
         'class' => $fieldClass,
         'id' => $fieldId
     ];
-    if ($fieldType === 'select') {
+    if ($fieldType === 'select')
+    {
         $fieldAttributes['options'] = [
             ['value' => 'option1', 'label' => 'Option 1'],
             ['value' => 'option2', 'label' => 'Option 2']
@@ -41,11 +46,14 @@ if (isset($_POST['ajouter'])) {
     header("Location: " . $_SERVER['PHP_SELF']);
     exit;
 }
-if ($_SERVER["REQUEST_METHOD"] === "POST" && !isset($_POST['ajouter']) && !isset($_POST['reset'])) {
-    if ($form->handleSubmission()) {
+if ($_SERVER["REQUEST_METHOD"] === "POST" && !isset($_POST['ajouter']) && !isset($_POST['reset']))
+{
+    if ($form->handleSubmission())
+    {
         echo "<p style='color: green;'>Le formulaire a été soumis avec succès !</p>";
         unset($_SESSION['fields']);
-    } else {
+    } else
+    {
         echo '<p style="color: red;">Veuillez corriger les erreurs ci-dessous.</p>';
     }
 }
@@ -75,7 +83,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && !isset($_POST['ajouter']) && !isset
         <button type="submit" name="ajouter">Ajouter le champ</button>
     </form>
 <?php
-if (!empty($_SESSION['fields'])) {
+if (!empty($_SESSION['fields']))
+{
     $form->render();
     echo '<form action="" method="post">';
     echo '<button type="submit" name="reset">Supprimer le formulaire</button>';
